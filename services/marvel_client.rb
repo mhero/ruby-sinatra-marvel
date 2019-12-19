@@ -4,21 +4,27 @@ class MarvelClient
   end
   
   def character_by_name(name)
-    results = @connetion.fetch("characters", name: name)
-    Character.new(results[:results].first)
+    result = @connetion.fetch("characters", name: name)
+    if result.success?
+      Character.new(result.handle.first)
+    end
   end
 
   def character_stories(character_id, limit = 10, offset = 0)
-    results = @connetion.fetch("characters/#{character_id}/stories",offset: offset, limit: limit)
-    results[:results].map do |story|
-      Story.new(story)
+    result = @connetion.fetch("characters/#{character_id}/stories",offset: offset, limit: limit)
+    if result.success?
+      result.handle.map do |story|
+        Story.new(story)
+      end
     end
   end
 
   def story_characters(story_id)
-    results = @connetion.fetch("stories/#{story_id}/characters")
-    results[:results].map do |character|
-      Character.new(character)
+    result = @connetion.fetch("stories/#{story_id}/characters")
+    if result.success?
+      result.handle.map do |character|
+        Character.new(character)
+      end
     end
   end
 end
