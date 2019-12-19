@@ -1,6 +1,7 @@
 class MainController < Sinatra::Base
   get "/" do
-    results = MarvelHttp.new.fetch("characters", name: "hulk")
-    results[:data][:results].to_json
+    CharacterSerializer.new(
+      MarvelClient.new.character_by_name("hulk")
+    ).serialized_json
   end
 end
