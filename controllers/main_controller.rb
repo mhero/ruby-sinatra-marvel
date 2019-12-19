@@ -1,16 +1,25 @@
 class MainController < Sinatra::Base
-  get "/" do
-    c = MarvelClient.new.character_by_name("hulk")
-    CharacterSerializer.new(c).serialized_json
+  get "/character" do
+    CharacterSerializer.new(
+      MarvelClient.new.character_by_name(params[:name])
+    ).serialized_json
+  end
 
-    b = MarvelClient.new.character_stories(c.id)
-    options = {}
-    options[:meta] = { total: b.count }
-    StorySerializer.new(b, options).serialized_json
+  get "/character/:id/stories" do |character_id|
+    response = MarvelClient.new.character_stories(character_id)
 
-    d = MarvelClient.new.story_characters(b.first.id)
-    options = {}
-    options[:meta] = { total: d.count }
-    CharacterSerializer.new(d, options).serialized_json
+    StorySerializer.new(
+      response,
+      meta: { total: response.count }
+    ).serialized_json
+  end
+
+  get "/story/:id/characters" do |story_id|
+    response = MarvelClient.new.story_characters(story_id)
+
+    CharacterSerializer.new(
+      response,
+      meta: { total: response.count }
+    ).serialized_json
   end
 end
