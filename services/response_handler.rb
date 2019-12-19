@@ -5,24 +5,32 @@ class ResponseHandler
   end
 
   def success?
-    @response.status == 200
+    @response.status == 200 && !empty_response?
   end
 
   def handle
     if success?
       successful_response[:results]
     else
-      error_response
+      error_response(custom_response_code || @response.status)
     end
   end
 
   private
 
-  def error_response
+  def custom_response_code
+    404 if empty_response?
+  end
+
+  def empty_response?
+    @body[:data][:results].empty?
+  end
+
+  def error_response(error_code)
     {
       body: @body,
       results: [],
-      status: @response.status
+      status: error_code
     }
   end
 
