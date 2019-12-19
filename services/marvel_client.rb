@@ -14,4 +14,11 @@ class MarvelClient
       Story.new(story)
     end
   end
+
+  def story_characters(story_id)
+    results = @connetion.fetch("stories/#{story_id}/characters")
+    results[:results].map do |character|
+      Character.new(character)
+    end
+  end
 end
