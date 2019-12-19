@@ -3,11 +3,9 @@ require "faraday"
 
 class MarvelHttp
   def initialize
-    @auth ||= MarvelAuth.authenticate
-
     @connection ||= Faraday.new(  
       url: ENV["MARVEL_ENDPOINT"],  
-      params: @auth,   
+      params: MarvelAuth.authenticate,   
       headers: {'Content-Type' => 'application/json'}
     )  
   end
@@ -17,11 +15,17 @@ class MarvelHttp
       params.each do |key, value|
         req.params[key] = value
       end
-    end 
-  
-    JSON.parse(
-      response.body,
-      symbolize_names: true
-    )
+    end
+    response_as_hash(response)
+  end
+
+  def response_as_hash(response)
+    body = JSON.parse(response.body, symbolize_names: true)
+
+    {
+      body: body,
+      results: body[:data][:results],
+      status: response.status
+    }
   end
 end
