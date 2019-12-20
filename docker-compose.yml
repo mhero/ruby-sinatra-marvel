@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    expose:
+      - 4567
+    ports:
+      - 4567:4567
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: > 
+      bash -c "bundle exec rackup --host 0.0.0.0 -p 4567"
