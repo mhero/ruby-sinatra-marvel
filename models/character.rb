@@ -6,6 +6,6 @@ class Character
     self.name = attributes[:name]
     self.description = attributes[:description]
     self.story_count = attributes[:stories][:available]
-    self.thumbnail = attributes[:thumbnail]
+    self.thumbnail = ThumbnailHelper.thumbnail_url(attributes[:thumbnail])
   end
 end
