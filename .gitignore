@@ -2,6 +2,8 @@
 
 .env
 
+node_modules
+
 coverage/.last_run.json
 
 coverage/.resultset.json

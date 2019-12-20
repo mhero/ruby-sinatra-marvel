@@ -1,8 +1,10 @@
 version: '3'
 
 services:
-  app:
-    build: .
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     expose:
       - 4567
     ports:
@@ -12,3 +14,17 @@ services:
       - .:/app
     command: > 
       bash -c "bundle exec rackup --host 0.0.0.0 -p 4567"
+  frontend:
+    container_name: front
+    image: node:12.14.0-stretch
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "npm install yarn && cd react-marvel && yarn install && yarn start"
+    depends_on:
+      - backend
