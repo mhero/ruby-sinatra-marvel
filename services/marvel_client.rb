@@ -10,8 +10,12 @@ class MarvelClient
     end
   end
 
-  def character_stories(character_id, limit = 10, offset = 0)
-    result = @connetion.fetch("characters/#{character_id}/stories",offset: offset, limit: limit)
+  def character_stories(character_id, options = {})
+    result = @connetion.fetch(
+                "characters/#{character_id}/stories",
+                limit: sanitize_param(options[:limit], 10),
+                offset: sanitize_param(options[:offset], 0)
+              )
     if result.success?
       result.handle.map do |story|
         Story.new(story)
@@ -26,5 +30,13 @@ class MarvelClient
         Character.new(character)
       end
     end
+  end
+
+  private
+
+  private
+
+  def sanitize_param(param, default)
+    (param || default).to_i
   end
 end

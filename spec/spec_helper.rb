@@ -7,7 +7,6 @@ ENV["RACK_ENV"] = "test"
 
 require File.expand_path(File.join("config", "app"))
 
-
 VCR.configure do |c|
   c.cassette_library_dir = "spec/vcr"
   c.hook_into :webmock
