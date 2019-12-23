@@ -1,11 +1,11 @@
 class MainController < Sinatra::Base
   get "/character" do
-    response = MarvelClient.new.character_by_name(params[:name])
+    response = Marvel::Client.new.character_by_name(params[:name])
     response_serializer(response, CharacterSerializer)
   end
 
   get "/character/:id/stories" do |character_id|
-    response = MarvelClient.new.character_stories(
+    response = Marvel::Client.new.character_stories(
       character_id,
       limit: params[:limit],
       offset: params[:offset]
@@ -14,7 +14,7 @@ class MainController < Sinatra::Base
   end
 
   get "/story/:id/characters" do |story_id|
-    response = MarvelClient.new.story_characters(story_id)
+    response = Marvel::Client.new.story_characters(story_id)
     response_serializer(response, CharacterSerializer)
   end
 
