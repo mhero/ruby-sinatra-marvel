@@ -1,8 +1,7 @@
 class MainController < Sinatra::Base
   get "/character" do
-    CharacterSerializer.new(
-      MarvelClient.new.character_by_name(params[:name])
-    ).serialized_json
+    response = MarvelClient.new.character_by_name(params[:name])
+    response_serializer(response, CharacterSerializer)
   end
 
   get "/character/:id/stories" do |character_id|
@@ -11,19 +10,24 @@ class MainController < Sinatra::Base
       limit: params[:limit],
       offset: params[:offset]
     )
-
-    StorySerializer.new(
-      response,
-      meta: { total: response.count }
-    ).serialized_json
+    response_serializer(response, StorySerializer)
   end
 
   get "/story/:id/characters" do |story_id|
     response = MarvelClient.new.story_characters(story_id)
+    response_serializer(response, CharacterSerializer)
+  end
 
-    CharacterSerializer.new(
-      response,
-      meta: { total: response.count }
-    ).serialized_json
+  private
+
+  def response_serializer(response, serializer)
+    if response.is_a? Array
+      serializer.new(
+        response,
+        meta: { total: response.count }
+      ).serialized_json
+    else
+      response.to_json
+    end
   end
 end
