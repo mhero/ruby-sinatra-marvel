@@ -20,8 +20,9 @@ describe MarvelClient do
   end
 
   it "can fetch & parse character data" do
-    expect(character_response).to be_kind_of(Character)
-    expect(character_response.name).to eq("Hulk")
+    expect(character_response).to be_kind_of(Array)
+    expect(character_response.count).to eq(1)
+    expect(character_response.first.name).to eq("Hulk")
   end
 
   it "can fetch & parse story data" do

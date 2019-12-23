@@ -1,44 +1,37 @@
 class ResponseHandler
   def initialize(response)
     @response = response
-    @body = JSON.parse(@response.body, symbolize_names: true)
+    unless  response.nil?
+      @body = JSON.parse(@response.body, symbolize_names: true) 
+    end
   end
 
   def success?
-    @response.status == 200 && !empty_response?
+    [@response, @body].all? && @response.status == 200 && !response_with_empty_data?
   end
 
-  def handle
+  def response_with_empty_data?
+    @body[:data][:results].empty?
+  end
+
+  def handle(klass)
     if success?
-      successful_response[:results]
+      @body[:data][:results].map do |object|
+        klass.new(object)
+      end
+    elsif response_with_empty_data?
+      error_response(404, "No data returned")
     else
-      error_response(custom_response_code || @response.status)
+      error_response(500, "Something went wrong on Marvel API")
     end
   end
 
   private
 
-  def custom_response_code
-    404 if empty_response?
-  end
-
-  def empty_response?
-    @body[:data][:results].empty?
-  end
-
-  def error_response(error_code)
+  def error_response(status, meesage)
     {
-      body: @body,
-      results: [],
-      status: error_code
-    }
-  end
-
-  def successful_response
-    {
-      body: @body,
-      results: @body[:data][:results],
-      status: @response.status
+      message: meesage,
+      status: status
     }
   end
 end

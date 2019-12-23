@@ -5,9 +5,7 @@ class MarvelClient
   
   def character_by_name(name)
     result = @connetion.fetch("characters", name: name)
-    if result.success?
-      Character.new(result.handle.first)
-    end
+    result.handle(Character)
   end
 
   def character_stories(character_id, options = {})
@@ -16,20 +14,12 @@ class MarvelClient
                 limit: sanitize_param(options[:limit], 10),
                 offset: sanitize_param(options[:offset], 0)
               )
-    if result.success?
-      result.handle.map do |story|
-        Story.new(story)
-      end
-    end
+    result.handle(Story)
   end
 
   def story_characters(story_id)
     result = @connetion.fetch("stories/#{story_id}/characters")
-    if result.success?
-      result.handle.map do |character|
-        Character.new(character)
-      end
-    end
+    result.handle(Character)
   end
 
   private
