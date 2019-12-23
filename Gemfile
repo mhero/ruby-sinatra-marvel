@@ -8,6 +8,7 @@ source "https://rubygems.org" do
   gem "faraday"
   gem "fast_jsonapi"
   gem "logger"
+  gem "faraday_middleware"
 
   group :test, :development do
     gem "rack-test"

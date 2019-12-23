@@ -24,8 +24,6 @@ class MarvelClient
 
   private
 
-  private
-
   def sanitize_param(param, default)
     (param || default).to_i
   end

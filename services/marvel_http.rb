@@ -1,5 +1,6 @@
 require "json"
 require "faraday"
+require "faraday_middleware"
 
 class MarvelHttp
   DEFAULT_TIMEOUT = 3 #seconds
@@ -10,15 +11,22 @@ class MarvelHttp
       params: MarvelAuth.authenticate,   
       headers: {'Content-Type' => 'application/json'},
       request: { timeout: DEFAULT_TIMEOUT }
-    )
+    ) do |conn|
+      conn.use MarvelServerErrors
+      conn.adapter Faraday.default_adapter
+    end
   end
 
   def fetch(endpoint, params = {})
-    response = @connection.get(endpoint) do |request|
-      params.each do |key, value|
-        request.params[key] = value
+    begin
+      response = @connection.get(endpoint) do |request|
+        params.each do |key, value|
+          request.params[key] = value
+        end
       end
-    end
+    rescue Faraday::TimeoutError
+      Error::Logger.timeout
+    end 
     ResponseHandler.new(response)
   end
 end
