@@ -1,4 +1,15 @@
 class MainController < Sinatra::Base
+  before do
+    headers['Access-Control-Allow-Methods'] = 'GET'
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
+  end
+  
+  options '*' do
+    response.headers['Allow'] = 'HEAD,GET,PUT,DELETE,OPTIONS,POST'
+    response.headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept'
+  end
+
   get "/character" do
     response = Marvel::Client.new.character_by_name(params[:name])
     response_serializer(response, CharacterSerializer)
