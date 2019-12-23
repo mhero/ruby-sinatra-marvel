@@ -38,7 +38,7 @@ class MainController < Sinatra::Base
         meta: { total: response.count }
       ).serialized_json
     else
-      response.to_json
+      status response
     end
   end
 end

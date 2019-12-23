@@ -24,18 +24,9 @@ class ResponseHandler
         klass.new(object)
       end
     elsif response_ok? && response_with_empty_data?
-      error_response(404, "No data returned")
+      404
     else
-      error_response(500, "Something went wrong on Marvel API")
+      500
     end
-  end
-
-  private
-
-  def error_response(status, meesage)
-    {
-      message: meesage,
-      status: status
-    }
   end
 end
