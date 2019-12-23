@@ -16,5 +16,6 @@ source "https://rubygems.org" do
     gem "webmock"
     gem "vcr"
     gem "rerun"
+    gem "simplecov", require: false
   end
 end

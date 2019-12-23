@@ -3,6 +3,8 @@ require "sinatra/base"
 require "dotenv/load"
 require "fast_jsonapi"
 require "logger"
+require "simplecov"
+SimpleCov.start
 
 $logger = Logger.new(STDOUT)
 
