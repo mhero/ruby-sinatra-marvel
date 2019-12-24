@@ -5,7 +5,7 @@ const axios = require('axios').default;
 const App = () => {
   const [character, setCharacter] = useState(null);
   const [stories, setStories] = useState(null);
-  const [storiesCharacters, setStoriesCharacters] = useState(null);
+  const [storyCharacters, setStoryCharacters] = useState(null);
   const [search, setSearch] = useState(null);
   const [error, setError] = useState(null);
 
@@ -13,7 +13,7 @@ const App = () => {
     setCharacter(null);
     setError(null);
     setStories(null);
-    setStoriesCharacters(null);
+    setStoryCharacters(null);
   }
 
   const updateError = (error, message) => {
@@ -30,7 +30,6 @@ const App = () => {
     .then((response) => {
       const character = response.data.data[0].attributes
       setCharacter(character);
-      
     })
     .catch((error) => {
       updateError(error, "Character not found");
@@ -48,12 +47,12 @@ const App = () => {
     });
   }
 
-  const getStoriesCharacters = (storyId) => {
-    setStoriesCharacters(null);
+  const getStoryCharacters = (storyId) => {
+    setStoryCharacters(null);
     axios.get(`${process.env.REACT_APP_API_URL}/story/${storyId}/characters`)
     .then((response) =>  {
-      const storiesCharacters = response.data.data;
-      setStoriesCharacters(storiesCharacters);
+      const storyCharacters = response.data.data;
+      setStoryCharacters(storyCharacters);
     })
     .catch((error) =>  {
       updateError(error, "Characters not found for this story");
@@ -83,7 +82,7 @@ const App = () => {
                   const {id, title, description} = item.attributes
                   return (
                     <li key={id}>
-                      <button type="button" onClick={() => getStoriesCharacters(id)}>{title}</button>
+                      <button type="button" onClick={() => getStoryCharacters(id)}>{title}</button>
                       <div>{description}</div>
                       <br></br>
                     </li>
@@ -95,7 +94,7 @@ const App = () => {
           <div class="panel story-characters-info">
             <h1>Starring</h1>
             <ul>
-              {storiesCharacters && storiesCharacters.map((item, i) =>{
+              {storyCharacters && storyCharacters.map((item, i) =>{
                   const {id, name, thumbnail} = item.attributes
                   return (
                     <li key={id}>
