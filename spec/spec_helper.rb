@@ -2,6 +2,8 @@ require "rack/test"
 require "rspec"
 require "webmock/rspec"
 require "vcr"
+require "simplecov"
+SimpleCov.start
 
 ENV["RACK_ENV"] = "test"
 
