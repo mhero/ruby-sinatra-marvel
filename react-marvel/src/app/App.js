@@ -5,6 +5,7 @@ const axios = require('axios').default;
 const App = () => {
   const [character, setCharacter] = useState(null);
   const [stories, setStories] = useState(null);
+  const [storiesCharacters, setStoriesCharacters] = useState(null);
   const [search, setSearch] = useState(null);
   const [error, setError] = useState(null);
 
@@ -12,6 +13,7 @@ const App = () => {
     setCharacter(null);
     setError(null);
     setStories(null);
+    setStoriesCharacters(null);
   }
 
   const getCharacter = () => {
@@ -48,6 +50,23 @@ const App = () => {
     });
   }
 
+  const getStoriesCharacters = (storyId) => {
+    setStoriesCharacters(null);
+    axios.get(`${process.env.REACT_APP_API_URL}/story/${storyId}/characters`)
+    .then(function (response) {
+      let storiesCharacters = response.data.data;
+      setStoriesCharacters(storiesCharacters);
+    })
+    .catch(function (error) {
+      // handle error
+      if (error.response.status === 404) {
+        setError({status: 404, message: "Characters not found for this story"});
+      } else {
+        setError({status: 500, message: "Error in server, please try again in some minutes"});
+      }
+    });
+  }
+
   return (
     <div className="App">
       <div class="search">
@@ -71,7 +90,7 @@ const App = () => {
                   const {id, title, description} = item.attributes
                   return (
                     <li key={id}>
-                      <a href="#">{title}</a>
+                      <button type="button" onClick={() => getStoriesCharacters(id)}>{title}</button>
                       <div>{description}</div>
                       <br></br>
                     </li>
@@ -82,7 +101,20 @@ const App = () => {
           </div>
           <div class="panel story-characters-info">
             <h1>Starring</h1>
-            <p>Story Characters here</p>
+            <ul>
+              {storiesCharacters && storiesCharacters.map((item, i) =>{
+                  const {id, name, thumbnail,description} = item.attributes
+                  return (
+                    <li key={id}>
+                      <div class="character-info">
+                        <h1>{name}</h1>
+                        <img src= {thumbnail} />
+                      </div>
+                    </li>
+                  )
+                })
+              }
+            </ul>
           </div>
         </div>
       )}
