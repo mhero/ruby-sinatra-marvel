@@ -21,6 +21,7 @@ class ResponseHandler
   def handle(klass)
     if success?
       @body[:data][:results].map do |object|
+        object[:attribution_text] = @body[:attributionText]
         klass.new(object)
       end
     elsif response_ok? && response_with_empty_data?
