@@ -9,6 +9,11 @@ ENV["RACK_ENV"] = "test"
 
 require File.expand_path(File.join("config", "app"))
 
+module RSpecMixin
+  include Rack::Test::Methods
+  def app() described_class end
+end
+
 VCR.configure do |c|
   c.cassette_library_dir = "spec/vcr"
   c.hook_into :webmock
@@ -19,7 +24,7 @@ end
 WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
-
+  config.include RSpecMixin
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

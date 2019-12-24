@@ -1,10 +1,10 @@
 require "spec_helper"
 
-describe Marvel::Client do
+RSpec.describe Marvel::Client do
   let(:character_response) do
     VCR.use_cassette(
-        "marvel/character", 
-        match_requests_on: [:body], 
+        "marvel/character",
+        match_requests_on: [:body],
         re_record_interval: 30.days
       ) do
       Marvel::Client.new.character_by_name("hulk")
@@ -14,7 +14,7 @@ describe Marvel::Client do
   let(:story_response) do
     VCR.use_cassette(
         "marvel/story",
-        match_requests_on: [:body], 
+        match_requests_on: [:body],
         re_record_interval: 30.days
       ) do
       Marvel::Client.new.character_stories("1009351", limit: 8)
@@ -23,7 +23,7 @@ describe Marvel::Client do
 
   let(:story_chaacters_response) do
     VCR.use_cassette(
-        "marvel/story_chaacters",
+        "marvel/story_characters",
         match_requests_on: [:body],
         re_record_interval: 30.days
       ) do
