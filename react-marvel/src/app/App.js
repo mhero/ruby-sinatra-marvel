@@ -4,15 +4,23 @@ const axios = require('axios').default;
 
 const App = () => {
   const [character, setCharacter] = useState(null);
+  const [stories, setStories] = useState(null);
   const [search, setSearch] = useState(null);
   const [error, setError] = useState(null);
 
+  const clear = () => {
+    setCharacter(null);
+    setError(null);
+    setStories(null);
+  }
+
   const getCharacter = () => {
+    clear();
     axios.get(`${process.env.REACT_APP_API_URL}/character?name=${search}`)
     .then(function (response) {
       let character = response.data.data[0].attributes
       setCharacter(character);
-      setError(null);
+      
     })
     .catch(function (error) {
       // handle error
@@ -21,7 +29,22 @@ const App = () => {
       } else {
         setError({status: 500, message: "Error in server, please try again in some minutes"});
       }
-      setCharacter(null);
+    });
+  }
+
+  const getStories = () => {
+    axios.get(`${process.env.REACT_APP_API_URL}/character/${character.id}/stories`)
+    .then(function (response) {
+      let stories = response.data.data;
+      setStories(stories);
+    })
+    .catch(function (error) {
+      // handle error
+      if (error.response.status === 404) {
+        setError({status: 404, message: "Stories not found"});
+      } else {
+        setError({status: 500, message: "Error in server, please try again in some minutes"});
+      }
     });
   }
 
@@ -39,23 +62,23 @@ const App = () => {
             <h1>{character.name}</h1>
             <img src= {character.thumbnail} />
             <p>{character.description}</p>
-            <button type="button">See stories</button>
+            <button type="button" onClick={getStories}>See stories</button>
           </div>
           <div class="panel stories-info">
             <h1>Stories</h1>
-            <table>
-              <thead>
-                  <tr>
-                      <th>Title</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>Title 1</tr>
-                  <tr>Title 2</tr>
-                  <tr>Title 3</tr>
-                  <tr>Title 4</tr>
-              </tbody>
-            </table>
+            <ul>
+              {stories && stories.map((item, i) =>{
+                  const {id, title, description} = item.attributes
+                  return (
+                    <li key={id}>
+                      <a href="#">{title}</a>
+                      <div>{description}</div>
+                      <br></br>
+                    </li>
+                  )
+                })
+              }
+            </ul>
           </div>
           <div class="panel story-characters-info">
             <h1>Starring</h1>
