@@ -16,54 +16,47 @@ const App = () => {
     setStoriesCharacters(null);
   }
 
+  const updateError = (error, message) => {
+    if (error.response != null && error.response.status === 404) {
+      setError({status: 404, message: message});
+    } else {
+      setError({status: 500, message: "Error in server, please try again in some minutes"});
+    }
+  }
+
   const getCharacter = () => {
     clear();
     axios.get(`${process.env.REACT_APP_API_URL}/character?name=${search}`)
-    .then(function (response) {
-      let character = response.data.data[0].attributes
+    .then((response) => {
+      const character = response.data.data[0].attributes
       setCharacter(character);
       
     })
-    .catch(function (error) {
-      // handle error
-      if (error.response.status === 404) {
-        setError({status: 404, message: "Character not found"});
-      } else {
-        setError({status: 500, message: "Error in server, please try again in some minutes"});
-      }
+    .catch((error) => {
+      updateError(error, "Character not found");
     });
   }
 
   const getStories = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/character/${character.id}/stories`)
-    .then(function (response) {
-      let stories = response.data.data;
+    .then((response) => {
+      const stories = response.data.data;
       setStories(stories);
     })
-    .catch(function (error) {
-      // handle error
-      if (error.response.status === 404) {
-        setError({status: 404, message: "Stories not found"});
-      } else {
-        setError({status: 500, message: "Error in server, please try again in some minutes"});
-      }
+    .catch((error) => {
+      updateError(error, "Stories not found");
     });
   }
 
   const getStoriesCharacters = (storyId) => {
     setStoriesCharacters(null);
     axios.get(`${process.env.REACT_APP_API_URL}/story/${storyId}/characters`)
-    .then(function (response) {
-      let storiesCharacters = response.data.data;
+    .then((response) =>  {
+      const storiesCharacters = response.data.data;
       setStoriesCharacters(storiesCharacters);
     })
-    .catch(function (error) {
-      // handle error
-      if (error.response.status === 404) {
-        setError({status: 404, message: "Characters not found for this story"});
-      } else {
-        setError({status: 500, message: "Error in server, please try again in some minutes"});
-      }
+    .catch((error) =>  {
+      updateError(error, "Characters not found for this story");
     });
   }
 
@@ -103,7 +96,7 @@ const App = () => {
             <h1>Starring</h1>
             <ul>
               {storiesCharacters && storiesCharacters.map((item, i) =>{
-                  const {id, name, thumbnail,description} = item.attributes
+                  const {id, name, thumbnail} = item.attributes
                   return (
                     <li key={id}>
                       <div class="character-info">
