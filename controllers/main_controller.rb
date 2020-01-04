@@ -32,13 +32,10 @@ class MainController < Sinatra::Base
   private
 
   def response_serializer(response, serializer)
-    if response.is_a? Array
-      serializer.new(
-        response,
-        meta: { total: response.count }
-      ).serialized_json
-    else
-      status response
-    end
+    return status response.code if response.is_a? Fault
+    serializer.new(
+      response,
+      meta: { total: response.count }
+    ).serialized_json
   end
 end

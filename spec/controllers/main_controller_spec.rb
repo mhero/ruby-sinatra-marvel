@@ -48,7 +48,7 @@ RSpec.describe MainController do
         ) do
         get "/character/:id/stories", id: "abc"
       end
-      expect(last_response.status).to be 500
+      expect(last_response.status).to be 404
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe MainController do
         ) do
         get "/story/:id/characters", id: "abc"
       end
-      expect(last_response.status).to be 500
+      expect(last_response.status).to be 404
     end
   end
 end
