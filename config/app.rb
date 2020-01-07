@@ -5,8 +5,6 @@ require "fast_jsonapi"
 require "logger"
 require "require_all"
 
-$logger = Logger.new(STDOUT)
-
 require_all "controllers/**/*.rb"
 require_all "helpers/**/*.rb"
 require_all "models/**/*.rb"

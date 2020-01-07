@@ -4,6 +4,8 @@ require "faraday_middleware"
 
 module Marvel
   class Http
+    include CustomLogger
+
     DEFAULT_TIMEOUT = 3 #seconds
 
     def initialize
@@ -26,7 +28,7 @@ module Marvel
           end
         end
       rescue Faraday::TimeoutError
-        Error::Logger.timeout
+        Log.timeout
       end 
       ResponseHandler.new(response)
     end
