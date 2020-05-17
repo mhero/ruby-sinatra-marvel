@@ -32,10 +32,11 @@ GEM
     logger (1.4.2)
     minitest (5.13.0)
     multipart-post (2.1.1)
-    mustermann (1.0.3)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     public_suffix (4.0.1)
-    rack (2.0.8)
-    rack-protection (2.0.7)
+    rack (2.2.2)
+    rack-protection (2.0.8.1)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -58,16 +59,17 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
+    ruby2_keywords (0.0.2)
     safe_yaml (1.0.5)
     simplecov (0.17.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    sinatra (2.0.7)
+    sinatra (2.0.8.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.7)
+      rack-protection (= 2.0.8.1)
       tilt (~> 2.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -99,4 +101,4 @@ DEPENDENCIES
   webmock!
 
 BUNDLED WITH
-   2.1.2
+   1.17.3
