@@ -1,6 +1,6 @@
 ## Dependencies
 
-* Ruby 2.6.5
+* Ruby 2.6.6
 * Node >= 12.14.0
 
 ## Apps info
@@ -35,8 +35,8 @@ docker-compose up
 ```
 brew install node
 \curl -sSL https://get.rvm.io | bash
-rvm install "ruby-2.6.5"
-rvm use 2.6.5
+rvm install "ruby-2.6.6"
+rvm use 2.6.6
 ```
 
 2. Clone repository
