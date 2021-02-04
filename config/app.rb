@@ -3,6 +3,7 @@ require "sinatra/base"
 require "dotenv/load"
 require "fast_jsonapi"
 require "logger"
+require "rack-cache"
 require "require_all"
 
 require_all "controllers/**/*.rb"

@@ -9,6 +9,7 @@ source "https://rubygems.org" do
   gem "fast_jsonapi"
   gem "logger"
   gem "faraday_middleware"
+  gem "rack-cache"
   gem "require_all"
 
   group :test, :development do
