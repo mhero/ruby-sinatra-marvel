@@ -1,0 +1,4 @@
+runtime: ruby
+env: flex
+service: default
+entrypoint: bundle exec rackup -p  8080
